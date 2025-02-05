@@ -13,7 +13,7 @@ from app.config import DBpath
 from app.models.note import Note
 from sqlalchemy.orm import Session
 from sqlalchemy import engine
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from app.database import NoteClass
 from datetime import datetime
 
@@ -32,31 +32,16 @@ class RBNote:
 @app.get("/notes/")
 @app.get("/notes/{amount}")
 def read_root(amount: Optional[str] = None):
-    engine = sqlalchemy.create_engine(DBpath, echo=True)
-    data = []
-    with engine.connect() as conn:
-        if amount is None:
-            result = session.scalars(select(NoteClass))
+    if amount is None:
+        result = session.scalars(select(NoteClass))
+    else:
+        result = session.scalars(select(NoteClass).where(NoteClass.id == amount))
 
-        else:
-            stmt = select(NoteClass)
-            result = session.scalars(select(NoteClass).where(NoteClass.id == amount))
-            # result = conn.execute(
-            #     sqlalchemy.text(f"SELECT * FROM note_database LIMIT {amount}")
-            # )
-        data = result_to_response(result)
-
-    #
-    # print(data)
-    engine.dispose()
-    # print(data)
-    # cont = json.dumps(data)
-    return HTMLResponse(content=data)
+    return HTMLResponse(content=result_to_response(result))
 
 
-@app.post("/register")
+@app.post("/notes/")
 async def register_user(note: Note):
-    print(note)
     try:
         note = Note(data=note.data, Note=note.Note)
 
@@ -65,21 +50,33 @@ async def register_user(note: Note):
     session.add(
         NoteClass(data=datetime.strptime(note.data, "%m-%d-%y %H:%M"), name=note.Note)
     )
-    # except:
-    #     print("xdd")
-    #     return HTMLResponse(status_code=500, content={"error": "wrong data format"})
+    session.commit()
+    return "data was add"
+
+
+@app.delete("/notes/{number}")
+async def delete_note(number: int):
+    # session.scalars(delete(NoteClass).where(NoteClass.id == number))
+    noteFroDelete = session.get(NoteClass, number)
+    session.flush()
+    try:
+        session.delete(noteFroDelete)
+    except:
+        return "data was not deleted"
     session.commit()
 
-    return "data was add"
-    return {"message": "User registered successfully", "user": user}
+    return "data was deleted"
 
 
 @app.exception_handler(RequestValidationError)
 async def cust(request: RequestValidationError, exc: RequestValidationError):
-    if request.url.path == "/register":
+    if request.url.path == "/notes/":
         return HTMLResponse(
             status_code=502,
             content=json.dumps({"detail": exc.errors(), "body": exc.body}),
         )
     else:
-        return HTMLResponse(status_code=422, content="")
+        return HTMLResponse(
+            status_code=422,
+            content=json.dumps({"detail": exc.errors(), "body": exc.body}),
+        )

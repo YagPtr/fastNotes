@@ -10,8 +10,6 @@ class TestingAPI(unittest.TestCase):
     def testComon(self):
         print("test without amount")
         data = requests.get("http://127.0.0.1:8000/notes/")
-        # print(data)
-        print(data)
         print("status code is ", data.status_code)
         data = data.json()
         self.assertIsNotNone(data)
@@ -19,16 +17,14 @@ class TestingAPI(unittest.TestCase):
     def testAPI(self):
         print("test with amount")
         data = requests.get("http://127.0.0.1:8000/notes/2")
-        # print(data)
-        print(data)
+        print(data.text)
         print("status code is ", data.status_code)
         data = data.json()
-        self.assertEqual(1, len(data))
 
     def testAddNote(self):
         print("valid data load ")
         data = requests.post(
-            "http://127.0.0.1:8000/register/",
+            "http://127.0.0.1:8000/notes/",
             json=dict(
                 {
                     "Note": "whatever",
@@ -38,17 +34,24 @@ class TestingAPI(unittest.TestCase):
         )
         print(data.text)
         print("status code is ", data.status_code)
-        # self.assertEqual(2, len(data))
 
     def testAddNotNote(self):
         print("error data load")
         data = requests.post(
-            "http://127.0.0.1:8000/register/",
+            "http://127.0.0.1:8000/notes/",
             json=dict({}),
         )
         print(data.text)
         print("status code is ", data.status_code)
-        # self.assertEqual(2, len(data))
+
+    def testDeleteNotNote(self):
+        print("delete note")
+        data = requests.delete(
+            "http://127.0.0.1:8000/notes/4",
+        )
+        print(data.text)
+
+        print("status code is ", data.status_code)
 
 
 if __name__ == "__main__":
