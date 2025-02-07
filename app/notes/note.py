@@ -1,10 +1,7 @@
 from pydantic import BaseModel, ConfigDict
-from datetime import datetime
 
 
 class Note(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     data: str
     Note: str
-
-    class Config:
-        validate_assignment = True

@@ -1,9 +1,6 @@
 import unittest
 import requests
-import json
-from models.note import Note
 from datetime import datetime
-# from utils import response_to_dict, result_to_response
 
 
 class TestingAPI(unittest.TestCase):
