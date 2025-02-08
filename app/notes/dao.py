@@ -5,7 +5,6 @@ from datetime import datetime
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import update as sqlalchemy_update, or_
 
-
 class NoteDAO:
     @classmethod
     async def find_all_students(cls):
@@ -46,7 +45,7 @@ class NoteDAO:
             return students.scalars().all()
 
     @classmethod
-    async def delete_note(cls, number: int):
+    async def delete_note(cls, number):
         async with async_session_maker() as session:
             async with session.begin():
                 query = (

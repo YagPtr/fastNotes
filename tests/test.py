@@ -8,8 +8,10 @@ class TestingAPI(unittest.TestCase):
         print("test without amount")
         data = requests.get("http://127.0.0.1:8000/notes/")
         print("status code is ", data.status_code)
+        assert data.status_code==200
         data = data.json()
-        self.assertIsNotNone(data)
+        assert data is not None
+        
 
     def testAPI(self):
         print("test with amount")
@@ -29,6 +31,7 @@ class TestingAPI(unittest.TestCase):
             ),
         )
         print(data.text)
+        assert data.status_code==200
         print("status code is ", data.status_code)
 
     def testAddNotNote(self):
@@ -39,16 +42,20 @@ class TestingAPI(unittest.TestCase):
         )
         print(data.text)
         print("status code is ", data.status_code)
+        assert data.status_code==502
 
+ 
     def testDeleteNotNote(self):
         print("delete note")
         data = requests.delete(
-            "http://127.0.0.1:8000/notes/21",
+            "http://127.0.0.1:8000/notes/1",
         )
         print(data)
 
         print(data.text)
         print("status code is ", data.status_code)
+        assert data.status_code==200
+
 
 
 if __name__ == "__main__":

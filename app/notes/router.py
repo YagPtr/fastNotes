@@ -18,10 +18,10 @@ async def register_user(note: Note):
 
 
 @router.get("/{amount}", summary="Получить запись по номеру все записи")
-async def get_note_with_number(amount: Optional[str] = None):
+async def get_note_with_number(amount: int = None):
     return await NoteDAO.find_notes(amount)
 
 
 @router.delete("/{amount}", summary="Удалить запись")
-async def delete_note_with_number(amount: Optional[str] = None):
+async def delete_note_with_number(amount: Optional[int] = None):
     return await NoteDAO.delete_note(amount)
