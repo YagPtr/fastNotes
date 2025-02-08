@@ -3,7 +3,7 @@ from app.notes.dao import NoteDAO
 from app.notes.note import Note
 from typing import Optional
 
-router = APIRouter(prefix="/notes", tags=["Работа со студентами"])
+router = APIRouter(prefix="/notes", tags=["Работа с записями"])
 
 
 @router.get("/", summary="Получить все записи")

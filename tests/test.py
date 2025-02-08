@@ -16,7 +16,7 @@ class TestingAPI(unittest.TestCase):
         data = requests.get("http://127.0.0.1:8000/notes/2")
         print(data.text)
         print("status code is ", data.status_code)
-        data = data.json()
+        data = data.json() 
 
     def testAddNote(self):
         print("valid data load ")
@@ -25,7 +25,6 @@ class TestingAPI(unittest.TestCase):
             json=dict(
                 {
                     "Note": "whatever",
-                    "data": str(datetime.now().strftime("%m-%d-%y %H:%M")),
                 }
             ),
         )
@@ -44,10 +43,11 @@ class TestingAPI(unittest.TestCase):
     def testDeleteNotNote(self):
         print("delete note")
         data = requests.delete(
-            "http://127.0.0.1:8000/notes/4",
+            "http://127.0.0.1:8000/notes/21",
         )
-        print(data.text)
+        print(data)
 
+        print(data.text)
         print("status code is ", data.status_code)
 
 
