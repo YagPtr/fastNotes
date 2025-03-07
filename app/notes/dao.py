@@ -27,6 +27,7 @@ class NoteDAO:
                             datetime.now().strftime("%m-%d-%y %H:%M"), "%m-%d-%y %H:%M"
                         ),
                         name=note.Note,
+                        author=note.author
                     )
                 )
                 try:
@@ -40,7 +41,7 @@ class NoteDAO:
     @classmethod
     async def find_notes(cls, number: int):
         async with async_session_maker() as session:
-            query = select(NoteClass).where(NoteClass.id == number)
+            query = select(NoteClass).where(NoteClass.author == number).where(or_(NoteClass.visible == True))
             students = await session.execute(query)
             return students.scalars().all()
 

@@ -17,8 +17,8 @@ async def register_user(note: Note):
     return check
 
 
-@router.get("/{amount}", summary="Получить запись по номеру все записи")
-async def get_note_with_number(amount: int = None):
+@router.get("/{amount}", summary="Получить записи по идентификатору владельца")
+async def get_note_with_number(amount: str = None):
     return await NoteDAO.find_notes(amount)
 
 

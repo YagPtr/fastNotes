@@ -17,7 +17,7 @@ venv\Scripts\activate
 ```
 Установка библиотек в виртуальное окружение
 ```
-pip install requirements.txt 
+pip install -r requirements.txt 
 ```
 Запуск проекта
 ```
