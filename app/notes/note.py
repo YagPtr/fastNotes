@@ -10,3 +10,4 @@ class Note(BaseModel):
 class GetResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     visible: bool
+

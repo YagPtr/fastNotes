@@ -163,3 +163,9 @@ cython_debug/
 #.idea/
 
 переработка/
+output.txt
+batForTgBotRunAndApi.bat
+RunTgBot.bat
+SCRIPT_FOR_RUNNING.bat
+Monitor.ps1
+hidden.vbs

@@ -12,7 +12,7 @@ async def get_all_notes():
 
 
 @router.post("/", summary="Добавление записи")
-async def register_user(note: Note):
+async def add_note(note: Note):
     check = await NoteDAO.add_note(note)
     return check
 
@@ -24,4 +24,8 @@ async def get_note_with_number(amount: str = None):
 
 @router.delete("/{amount}", summary="Удалить запись")
 async def delete_note_with_number(amount: Optional[int] = None):
+    return await NoteDAO.delete_note(amount)
+
+@router.post("/{amount}", summary="Добавить пользователя")
+async def register_user(amount: Optional[int] = None):
     return await NoteDAO.delete_note(amount)

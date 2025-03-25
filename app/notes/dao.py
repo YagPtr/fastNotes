@@ -38,6 +38,26 @@ class NoteDAO:
                     return "note was not added"
                 return "note was added"
 
+
+    @classmethod
+    async def add_user(cls, user):
+        async with async_session_maker() as session:
+            async with session.begin():
+                session.add(
+                    User(
+                        username=user.username,
+                        email=user.email
+                    )
+                )
+                try:
+                    await session.commit()
+                except SQLAlchemyError as e:
+                    await session.rollback()
+                    print(e)
+                    return "user was not added"
+                return "user was added"
+            
+
     @classmethod
     async def find_notes(cls, number: int):
         async with async_session_maker() as session:
