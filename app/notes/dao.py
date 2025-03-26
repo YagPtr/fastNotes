@@ -66,9 +66,18 @@ class NoteDAO:
     @classmethod
     async def find_notes(cls, number: int):
         async with async_session_maker() as session:
-            query = select(NoteClass).where(NoteClass.author == number).where(or_(NoteClass.visible == True))
+            query = select(NoteClass).where(NoteClass.user_id == number).where(or_(NoteClass.visible == True))
             students = await session.execute(query)
             return students.scalars().all()
+
+
+    @classmethod
+    async def find_notes_completed(cls, number: int):
+        async with async_session_maker() as session:
+            query = select(NoteClass).where(NoteClass.user_id == number).where(or_(NoteClass.visible == False,NoteClass.visible==None))
+            students = await session.execute(query)
+            return students.scalars().all()
+
 
     @classmethod
     async def delete_note(cls, number):

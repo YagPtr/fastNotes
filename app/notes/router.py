@@ -18,8 +18,14 @@ async def add_note(note: Note):
 
 
 @router.get("/{amount}", summary="Получить записи по идентификатору владельца")
-async def get_note_with_number(amount: str = None):
+async def get_note_with_number(amount: int = None):
     return await NoteDAO.find_notes(amount)
+
+@router.get("/completed/{amount}", summary="Завершенные задачи")
+async def get_note_with_number(amount: int = None):
+    return await NoteDAO.find_notes_completed(amount)
+
+
 
 
 @router.delete("/{amount}", summary="Удалить запись")
