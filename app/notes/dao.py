@@ -1,5 +1,6 @@
+from fontTools.merge.util import first
 from sqlalchemy import select, delete
-from app.notes.model import NoteClass
+from app.notes.model import NoteClass,User
 from app.database import async_session_maker
 from datetime import datetime
 from sqlalchemy.exc import SQLAlchemyError
@@ -19,15 +20,17 @@ class NoteDAO:
 
     @classmethod
     async def add_note(cls, note):
+        print("s")
         async with async_session_maker() as session:
             async with session.begin():
+                print(note)
                 session.add(
                     NoteClass(
                         data=datetime.strptime(
                             datetime.now().strftime("%m-%d-%y %H:%M"), "%m-%d-%y %H:%M"
                         ),
                         name=note.Note,
-                        author=note.author
+                        user_id=note.user_id
                     )
                 )
                 try:
@@ -45,8 +48,10 @@ class NoteDAO:
             async with session.begin():
                 session.add(
                     User(
-                        username=user.username,
-                        email=user.email
+                        id=user.user_id,
+                        first_name=user.first_name,
+                        last_name=user.last_name
+
                     )
                 )
                 try:

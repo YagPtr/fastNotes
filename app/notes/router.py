@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.notes.dao import NoteDAO
-from app.notes.note import Note
+from app.notes.note import Note,User
 from typing import Optional
 
 router = APIRouter(prefix="/notes", tags=["Работа с записями"])
@@ -26,6 +26,6 @@ async def get_note_with_number(amount: str = None):
 async def delete_note_with_number(amount: Optional[int] = None):
     return await NoteDAO.delete_note(amount)
 
-@router.post("/{amount}", summary="Добавить пользователя")
-async def register_user(amount: Optional[int] = None):
-    return await NoteDAO.delete_note(amount)
+@router.post("/register/", summary="Добавить пользователя")
+async def register_user(user:User):
+    return await NoteDAO.add_user(user)
