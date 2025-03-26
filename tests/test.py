@@ -15,7 +15,7 @@ class TestingAPI(unittest.TestCase):
 
     def testAPI(self):
         print("test with amount")
-        data = requests.get("http://127.0.0.1:8000/notes/1")
+        data = requests.get("http://127.0.0.1:8000/notes/12313")
         print(data.text)
         print("status code is ", data.status_code)
         data = data.json() 
@@ -26,7 +26,7 @@ class TestingAPI(unittest.TestCase):
             "http://127.0.0.1:8000/notes/",
             json=dict(
                 {
-                    "Note": "whatever","user_id":2
+                    "Note": "whatever","user_id":"12313"
                 }
             ),
         )

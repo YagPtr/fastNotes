@@ -1,12 +1,20 @@
 from sqlalchemy import DateTime
 from sqlalchemy import String, Boolean
 from app.database import Base, str_uniq, int_pk, str_null_true
-from sqlalchemy.orm import relationship, Mapped, mapped_column
+from sqlalchemy.orm import relationship, Mapped, mapped_column, foreign
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from typing import Optional
 from sqlalchemy import ForeignKey, text, Text
+from  sqlalchemy.types import BigInteger
 from datetime import date
+import sqlalchemy
+
+
+
+
+
+
 class NoteClass(Base):
     __tablename__ = "note_database"
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -16,7 +24,7 @@ class NoteClass(Base):
     executor: Mapped[Optional[str]] = mapped_column(String(100))
     visible: Mapped[Optional[bool]] = mapped_column(Boolean, default=True)
     data_of_close: Mapped[Optional[DateTime]] = mapped_column(DateTime)
-    user_id: Mapped[int] = mapped_column(ForeignKey("User.id"), nullable=False)
+    user_id: Mapped[str] = mapped_column(ForeignKey("User.id"), nullable=False)
     user: Mapped["User"] = relationship("User")
 
 
@@ -25,11 +33,12 @@ class NoteClass(Base):
 
 
 
-
 # создаем модель таблицы студентов
 class   User(Base):
     __tablename__ = "User"
-    id: Mapped[int_pk]
+    id: Mapped[str]=mapped_column(
+        primary_key=True
+    )
     # phone_number: Mapped[str_uniq]
     first_name: Mapped[str]
     last_name: Mapped[str]
@@ -50,6 +59,7 @@ class   User(Base):
 
     def __repr__(self):
         return str(self)
+
 
 
 # создаем модель таблицы факультетов (majors)

@@ -3,7 +3,7 @@ from sqlalchemy.orm import DeclarativeBase, declared_attr
 from app.config import get_db_url
 from typing import Annotated
 from datetime import datetime
-from sqlalchemy import func
+from sqlalchemy import func,BigInteger
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, declared_attr, Mapped, mapped_column
 
@@ -15,6 +15,9 @@ async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
 # настройка аннотаций
 int_pk = Annotated[int, mapped_column(primary_key=True)]
+
+# int_pk = Annotated[BigInteger, mapped_column(primary_key=True)]
+
 created_at = Annotated[datetime, mapped_column(server_default=func.now())]
 updated_at = Annotated[datetime, mapped_column(server_default=func.now(), onupdate=datetime.now)]
 str_uniq = Annotated[str, mapped_column(unique=True, nullable=False)]

@@ -4,12 +4,12 @@ from pydantic import BaseModel, ConfigDict
 class Note(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     Note: str
-    user_id:int
+    user_id:str
 
 
 class User(BaseModel):
     model_config = ConfigDict(from_attributes=True)
-    user_id: int
+    user_id: str
     first_name: str
     last_name:str
 
