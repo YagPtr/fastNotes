@@ -5,25 +5,26 @@ from app.database import async_session_maker
 from datetime import datetime
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import update as sqlalchemy_update, or_
+from app.utils import logEvent
+from datetime import datetime
 
 class NoteDAO:
     @classmethod
     async def find_all_students(cls):
         async with async_session_maker() as session:
-            # if somedata.visible:
-            #     print("visible")
+            logEvent(str(datetime.now()))
             query = select(NoteClass).where(
                 or_(NoteClass.visible == True, NoteClass.visible == None)
             )
             students = await session.execute(query)
+            logEvent("Успешный запрос всех записей")
             return students.scalars().all()
 
     @classmethod
     async def add_note(cls, note):
-        print("s")
         async with async_session_maker() as session:
             async with session.begin():
-                print(note)
+                logEvent(str(datetime.now()))
                 session.add(
                     NoteClass(
                         data=datetime.strptime(
@@ -35,9 +36,10 @@ class NoteDAO:
                 )
                 try:
                     await session.commit()
+                    logEvent("Успешное добавление записи")
                 except SQLAlchemyError as e:
                     await session.rollback()
-                    print(e)
+                    logEvent(e)
                     return "note was not added"
                 return "note was added"
 
@@ -46,6 +48,7 @@ class NoteDAO:
     async def add_user(cls, user):
         async with async_session_maker() as session:
             async with session.begin():
+                logEvent(str(datetime.now()))
                 session.add(
                     User(
                         id=user.user_id,
@@ -56,9 +59,10 @@ class NoteDAO:
                 )
                 try:
                     await session.commit()
+                    logEvent("Успешное добавление пользователя "+ user.user_id)
                 except SQLAlchemyError as e:
                     await session.rollback()
-                    print(e)
+                    logEvent(e)
                     return "user was not added"
                 return "user was added"
             
@@ -66,6 +70,7 @@ class NoteDAO:
     @classmethod
     async def find_notes(cls, number: int):
         async with async_session_maker() as session:
+            logEvent(str(datetime.now()))
             query = select(NoteClass).where(NoteClass.user_id == number).where(or_(NoteClass.visible == True))
             students = await session.execute(query)
             return students.scalars().all()
@@ -74,6 +79,7 @@ class NoteDAO:
     @classmethod
     async def find_notes_completed(cls, number: int):
         async with async_session_maker() as session:
+            logEvent(str(datetime.now()))
             query = select(NoteClass).where(NoteClass.user_id == number).where(or_(NoteClass.visible == False,NoteClass.visible==None))
             students = await session.execute(query)
             return students.scalars().all()
@@ -83,6 +89,7 @@ class NoteDAO:
     async def delete_note(cls, number):
         async with async_session_maker() as session:
             async with session.begin():
+                logEvent(str(datetime.now()))
                 query = (
                     sqlalchemy_update(NoteClass)
                     .where(NoteClass.id == number)
@@ -100,7 +107,8 @@ class NoteDAO:
                 result = await session.execute(query)
                 try:
                     await session.commit()
+                    logEvent("Успешное удаление заметки "+str(number))
                 except SQLAlchemyError as e:
                     await session.rollback()
-                    raise e
+                    # raise e
                 return result.rowcount

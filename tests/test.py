@@ -20,13 +20,26 @@ class TestingAPI(unittest.TestCase):
         print("status code is ", data.status_code)
         data = data.json() 
 
+    def testAddUser(self):
+        print("add new user")
+        data = requests.post(
+            "http://127.0.0.1:8000/notes/register/",
+            json=dict(
+                {
+                    "user_id": "whatever", 
+                    "first_name":"whatever",
+                    "last_name":"whatever"
+                }
+            ),
+        )
+
     def testAddNote(self):
         print("valid data load ")
         data = requests.post(
             "http://127.0.0.1:8000/notes/",
             json=dict(
                 {
-                    "Note": "whatever","user_id":"12313"
+                    "Note": "whatever","user_id":"whatever"
                 }
             ),
         )
@@ -58,5 +71,5 @@ class TestingAPI(unittest.TestCase):
 
 
 
-if __name__ == "__main__":
-    unittest.main()
+# if __name__ == "__main__":
+#     unittest.main()

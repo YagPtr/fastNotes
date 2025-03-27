@@ -2,7 +2,6 @@ from fastapi import APIRouter
 from app.notes.dao import NoteDAO
 from app.notes.note import Note,User
 from typing import Optional
-
 router = APIRouter(prefix="/notes", tags=["Работа с записями"])
 
 
