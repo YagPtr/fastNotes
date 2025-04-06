@@ -73,9 +73,24 @@ class NoteDAO:
             logEvent(str(datetime.now()))
             query = select(NoteClass).where(NoteClass.user_id == number).where(or_(NoteClass.visible == True))
             students = await session.execute(query)
+            return students.scalars().first()
+        
+    @classmethod
+    async def find_notes_as_executor(cls, number: int):
+        async with async_session_maker() as session:
+            logEvent(str(datetime.now()))
+            query = select(NoteClass).where(NoteClass.executor == number).where(or_(NoteClass.visible == True))
+            students = await session.execute(query)
             return students.scalars().all()
-
-
+        
+    @classmethod
+    async def find_user_by_name(cls, number: str):
+        async with async_session_maker() as session:
+            logEvent(str(datetime.now()))
+            query = select(User).where(User.first_name == number)
+            students = await session.execute(query)
+            return students.scalars().all()
+        
     @classmethod
     async def find_notes_completed(cls, number: int):
         async with async_session_maker() as session:
@@ -112,3 +127,39 @@ class NoteDAO:
                     await session.rollback()
                     # raise e
                 return result.rowcount
+
+    @classmethod
+    async def add_note_for_someone(cls, note):
+
+        async with async_session_maker() as session:
+            async with session.begin():
+                logEvent(str(datetime.now()))
+                session.add(
+                    NoteClass(
+                        data=datetime.strptime(
+                            datetime.now().strftime("%m-%d-%y %H:%M"), "%m-%d-%y %H:%M"
+                        ),
+                        name=note.Note,
+                        user_id=note.user_id,
+                        executor=note.executor_id
+                    )
+                )
+                try:
+                    await session.commit()
+                    logEvent("Успешное добавление записи")
+                except SQLAlchemyError as e:
+                    await session.rollback()
+                    logEvent(e)
+                    return "note was not added"
+                return "note was added"
+            
+    @classmethod
+    async def get_note_with_its_id(cls,number):
+        async with async_session_maker() as session:
+            logEvent(str(datetime.now()))
+            query = select(NoteClass).where(
+                NoteClass.id==number
+            )
+            students = await session.execute(query)
+            logEvent("Успешный запрос записи по номеру")
+            return students.scalars().all()
