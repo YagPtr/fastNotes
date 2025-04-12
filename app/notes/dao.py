@@ -73,7 +73,7 @@ class NoteDAO:
             logEvent(str(datetime.now()))
             query = select(NoteClass).where(NoteClass.user_id == number).where(or_(NoteClass.visible == True))
             students = await session.execute(query)
-            return students.scalars().first()
+            return students.scalars().all()
         
     @classmethod
     async def find_notes_as_executor(cls, number: int):
